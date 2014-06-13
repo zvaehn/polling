@@ -13,3 +13,6 @@ A simple poll tool witch supports live result updates.
 3. Start the app with `npm start`.
 
 You need to install [MongoDB](http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/) and [Node](http://nodejs.org/download/), if you have not already installed them.
+
+
+Thanks to [verwebbt](http://github.com/verwebbt) for the middleware stuff.
