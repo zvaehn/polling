@@ -1,7 +1,7 @@
 polling
 =======
 
-A simple poll tool witch supports live result updates.
+A simple poll tool which supports live result updates.
 
 #### Demo
 [Check out](http://51seven.de:8011 "Live Demo") the live demo.
