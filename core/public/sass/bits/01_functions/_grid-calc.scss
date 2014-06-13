@@ -1,0 +1,6 @@
+// @FUNCTION
+// $colNumber - Found in settings file
+// $totalColumns - Found in settings file
+@function grid-calc($colNumber, $totalColumns) {
+	@return percentage(($colNumber / $totalColumns));
+}

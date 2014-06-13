@@ -1,0 +1,15 @@
+@function lower-bound($range){
+  @if length($range) <= 0 {
+  	@warn "The variable #{$range} needs at least 1 value!";
+    @return 0;
+  }
+  @return nth($range,1);
+}
+
+@function upper-bound($range) {
+  @if length($range) < 2 {
+  	@warn "The variable #{$range} has more than 2 values!";
+    @return 999999999999;
+  }
+  @return nth($range, 2);
+}

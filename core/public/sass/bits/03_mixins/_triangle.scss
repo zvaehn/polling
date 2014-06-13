@@ -1,0 +1,23 @@
+@mixin triangle($direction, $width, $height, $color) {
+	width: 0;
+	height: 0;
+	@if $direction == left {
+		border-right: $width solid $color;
+		border-top: $height/2 solid transparent;
+		border-bottom: $height/2 solid transparent;
+	} @else if $direction == right {
+		border-left: $width solid $color;
+		border-top: $height/2 solid transparent;
+		border-bottom: $height/2 solid transparent;
+	} @else if $direction == up {
+		border-bottom: $height solid $color;
+		border-left: $width/2 solid transparent;
+		border-right: $width/2 solid transparent;
+	} @else if $direction == down {
+		border-top: $height solid $color;
+		border-left: $width/2 solid transparent;
+		border-right: $width/2 solid transparent;
+	} @else {
+		@warn "Unknown direction #{$direction}. Supported direction: left, right, up, down."
+	}
+}

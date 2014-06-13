@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ poll.question }}</title>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href='/stylesheets/foundation.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body class="show">
+    <section class="poll-view">
+      <div class="row">
+        <div class="small-12 medium-8 small-centered columns">
+          <h2>{{ poll.question }}</h2>
+          <p><small>erstellt am {{ poll.date }}</small></p>
+          {{# message }}{{ message }}{{/ message }}
+
+           <form method="post" action="/{{poll.url}}/vote">
+          
+            <ul id="answer-list">
+              {{#poll.answers}} 
+                <li><input type="radio" name="answer" value="{{_id}}"> {{answer}}</li>   
+              {{/poll.answers}} 
+            </ul>
+            
+            <input type="hidden" name="_csrf" value="{{ token }}">
+
+            <button type="submit" id="vote-button" class="button success" name="vote">Submit your vote</button>
+            <a href="/{{poll.url}}/results" class="button">Show Results <span class="fi-arrow-right"></span></a>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/js/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      
+      $('#vote-button').click(function() {
+        //var answers = $('#answer-list');
+        var choice = $("input[name='answer']:checked").val();
+        /*
+        $('#answer-list li').children('input').each(function() {
+          var answer = this.value;
+        });*/
+
+        var data = {question: "{{poll._id}}", answer: choice };
+        socket.emit('poll-update', data);
+      });
+  </script> 
+  </body>
+</html>

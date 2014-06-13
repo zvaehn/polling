@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/foundation.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <section class="poll-new">
+      <div class="row">
+        <div class="small-10 medium-8 small-centered columns">
+          <h2>Create a new <i>interactive</i> poll</h2>
+          {{# message }}{{ message }}{{/ message }}
+
+          <form method="post" action="/poll/new">
+            <input type="text" class="question-field" name="question" placeholder="Type in your question...">
+
+            <ul id="answer-list" style="list-style-type: decimal;">
+        		  <li><input type="text" name="answers[]"></li>
+              <li><input type="text" name="answers[]"></li>
+              <li><input type="text" name="answers[]"></li>
+            </ul>
+
+            <p>
+              <input type="checkbox" name="multiuser"> Allow users to vote more then once<br>
+              <!--<small><i>Empty answers will be filtered out automaticly.</i></small>-->
+            </p>
+
+            <input type="hidden" name="_csrf" value="{{ token }}">
+        		<button type="submit">Go!</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="row">
+        <div class="small-12 small-centered columns">
+          <ul>
+            <li><a href="//twitter.com/zvaehn" target="_blank" class="fi-social-twitter"></a></li>
+            <li><a href="//github.com/zvaehn" target="_blank" class="fi-social-github"></a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="/js/ux.js"></script>
+  </body>
+</html>

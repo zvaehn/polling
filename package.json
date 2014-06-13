@@ -1,0 +1,39 @@
+{
+  "name": "polling",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "nodemon --watch core ./index.js"
+  },
+  "dependencies": {
+    "express": "~4.3.0",
+    "less-middleware": "*",
+    "mongoose": "*",
+    "consolidate": "*",
+    "hogan.js": "*",
+    "when": "*",
+    "cli-color": "*",
+    "nodemon": "*",
+    "load-grunt-tasks": "~0.2.0",
+    "body-parser": "*",
+    "serve-favicon": "*",
+    "method-override": "*",
+    "cookie-parser": "*",
+    "express-session": "*",
+    "csurf": "*",
+    "morgan": "*",
+    "connect-flash": "*",
+    "connect-multiparty": "*",
+    "socket.io": "~1.0.4"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-compass": "~0.8.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-concat": "~0.4.0",
+    "grunt-contrib-uglify": "~0.4.0",
+    "grunt-contrib-imagemin": "~0.7.0",
+    "grunt-focus": "~0.1.1"
+  }
+}

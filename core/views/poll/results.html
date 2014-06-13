@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ poll.question }}</title>
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+  <link rel='stylesheet' href='/stylesheets/foundation.min.css' />
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body class="results">
+  <section class="poll-results">
+    <div class="row">
+      <div class="small-12 medium-8 small-centered columns">
+        <h2>{{ poll.question }}</h2>
+        <p><small>erstellt am {{ poll.date }}. Total votes: {{total_votes}}</small></p>
+        {{# hasMessages }} <p>{{ messages }}</p> {{/ hasMessages }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-12 medium-8 small-centered columns">
+        <ul id="answer-list">
+          {{#poll.answers}} 
+            <li id="{{_id}}"><span class="secondary round radius label">{{counter}}</span> {{answer}}</li>   
+          {{/poll.answers}} 
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-12 medium-8 small-centered columns">
+        <div id="barchart" class="charts">
+          <canvas style="margin: 0 auto;" id="barChart" height="200" width="350"></canvas>
+        </div>
+        <div class="button-bar options">
+          <ul class="button-group">
+            <!--<li><a class="button small fi-arrow-left" href="/{{poll.url}}"> Back to poll</a></li>-->
+            <li><button class="button small" onClick='prompt("Copy the link and paste it anywhere.", "http://localhost:4000/{{poll.url}}")'>Share it <span class="fi-megaphone"></span></button></li>
+            <li><a class="button small" href="/">Create your own poll <span class="fi-loop"></span></a></li>
+          </ul>             
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script src="/js/socket.io/socket.io.js"></script>
+  <!--<script src="/js/ux.js"></script>-->
+  <script src="/js/chart.min.js"></script>
+  <script>
+
+    var socket = io();
+    var answers = Array();
+    var counters = Array();
+    var answer_counter = 1;
+    var max_count = 0;
+
+    $("#view-tabs").tabs({active: 0});
+
+    // Preparing Data
+    {{#poll.answers}} 
+      answers.push(answer_counter++);
+      counters.push("{{counter}}");
+      if({{counter}} > max_count) {
+        max_count = {{counter}};
+      }
+    {{/poll.answers}} 
+
+    // bar Chart Data
+    var barData = {
+      labels : answers,
+      datasets : [
+        {
+          fillColor : "rgba(151,187,205,0.5)",
+          strokeColor : "rgba(151,187,205,1)",
+          pointColor : "rgba(151,187,205,1)",
+          pointStrokeColor : "#fff",
+          data : counters
+        }
+      ]
+    };
+
+    // bar Options
+    var barOptions = {scaleOverride: true, scaleSteps: max_count, scaleStepWidth: 1, scaleStartValue: 0 };
+
+    var ctx = $("#barChart").get(0).getContext("2d");
+    var barChart = new Chart(ctx);
+    barChart.Bar(barData, barOptions);
+
+    // Listen on new Updates
+    socket.on("poll-update-{{poll._id}}", function(data) {
+      var answer = '#'+data+" span";
+      var counter = $(answer).text();
+
+      // Update the answer-counter
+      $(answer).text(parseInt(counter)+1);
+      $(answer).removeClass('secondary').addClass('answer-update').delay(300).queue(function(next) {
+        $(this).removeClass('answer-update').addClass('secondary');
+      });
+
+      // Getting all the new answer-values \o/
+      var updated_counter = Array();
+
+      $('#answer-list').children('li').each(function(index) {
+        var span = $(this).children('span');
+        updated_counter.push($(span).text());
+
+        // Is there a new maximum value?
+        if(barOptions.scaleSteps < $(span).text()) {
+          barOptions.scaleSteps = $(span).text();
+        }
+      });
+
+      barOptions.animation = false; // pretends the chart to be animated again
+
+      // Pass into Data
+      barData.datasets[0].data = updated_counter;        
+      barChart.Bar(barData, barOptions);
+    });
+  </script>
+</body>
+</html>
